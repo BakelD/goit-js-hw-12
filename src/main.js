@@ -38,7 +38,7 @@ refs.form.addEventListener('submit', async e => {
 
   try {
     const {
-      data: { hits: images },
+      data: { hits: images, totalHits },
     } = await fetchImages(query, currentPage);
 
     if (!images.length) {
@@ -52,15 +52,18 @@ refs.form.addEventListener('submit', async e => {
       return;
     }
 
-    refs.loader.classList.remove('is-visible');
+    totalPages = Math.ceil(totalHits / itemsPerPage);
+
+    if (currentPage < totalPages) {
+      refs.btnLoadMore.classList.add('is-visible');
+    }
+
     // refs.gallerylist.innerHTML = renderMarkUp(images);
     // simpleLightbox.refresh();
     renderMarkUp(images, refs.gallerylist, simpleLightbox);
 
     e.target.elements['search-text'].value = '';
     currentPage += 1;
-
-    refs.btnLoadMore.classList.add('is-visible');
 
     const elemHeight = document
       .querySelector('.gallery-item')
@@ -76,21 +79,22 @@ refs.form.addEventListener('submit', async e => {
       message: error.message,
       position: 'topRight',
     });
+  } finally {
+    refs.loader.classList.remove('is-visible');
   }
 });
 
 refs.btnLoadMore.addEventListener('click', async () => {
+  refs.btnLoadMore.disabled = true;
+  refs.loader.classList.add('is-visible');
   try {
     const {
       data: { totalHits, hits: images },
     } = await fetchImages(query, currentPage);
 
-    refs.loader.classList.remove('is-visible');
     // refs.gallerylist.insertAdjacentHTML('beforeend', renderMarkUp(images));
     // simpleLightbox.refresh();
     renderMarkUp(images, refs.gallerylist, simpleLightbox);
-
-    totalPages = Math.ceil(totalHits / itemsPerPage);
 
     if (currentPage === totalPages) {
       iziToast.info({
@@ -111,6 +115,9 @@ refs.btnLoadMore.addEventListener('click', async () => {
     });
 
     console.log(error.message);
+  } finally {
+    refs.loader.classList.remove('is-visible');
+    refs.btnLoadMore.disabled = false;
   }
 });
 
