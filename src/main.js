@@ -57,8 +57,10 @@ refs.form.addEventListener('submit', async e => {
     }
 
     refs.loader.classList.remove('is-visible');
-    refs.gallerylist.innerHTML = renderMarkUp(images);
-    simpleLightbox.refresh();
+    // refs.gallerylist.innerHTML = renderMarkUp(images);
+    // simpleLightbox.refresh();
+    renderMarkUp(images, refs.gallerylist, simpleLightbox);
+
     e.target.elements['search-text'].value = '';
     currentPage += 1;
 
@@ -88,8 +90,9 @@ refs.btnLoadMore.addEventListener('click', async () => {
     } = await fetchImages(query, currentPage);
 
     refs.loader.classList.remove('is-visible');
-    refs.gallerylist.insertAdjacentHTML('beforeend', renderMarkUp(images));
-    simpleLightbox.refresh();
+    // refs.gallerylist.insertAdjacentHTML('beforeend', renderMarkUp(images));
+    // simpleLightbox.refresh();
+    renderMarkUp(images, refs.gallerylist, simpleLightbox);
 
     totalPages = Math.ceil(totalHits / itemsPerPage);
 

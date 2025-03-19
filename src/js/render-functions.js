@@ -32,7 +32,11 @@ const getMarkUp = ({
         </div>
       </li>`;
 
-export const renderMarkUp = items =>
-  items.map(item => getMarkUp(item)).join('');
+export const renderMarkUp = (items, elem, simpleLightbox) => {
+  const markUp = items.map(item => getMarkUp(item)).join('');
+
+  elem.insertAdjacentHTML('beforeend', markUp);
+  simpleLightbox.refresh();
+};
 
 export const simpleLightbox = new SimpleLightbox('.gallery-link');
