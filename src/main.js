@@ -31,9 +31,7 @@ refs.form.addEventListener('submit', async e => {
       position: 'topRight',
     });
 
-    refs.loader.classList.remove('is-visible');
-    refs.btnLoadMore.classList.remove('is-visible');
-    e.target.elements['search-text'].value = '';
+    clear(e);
 
     return;
   }
@@ -50,9 +48,7 @@ refs.form.addEventListener('submit', async e => {
         position: 'topRight',
       });
 
-      refs.loader.classList.remove('is-visible');
-      refs.btnLoadMore.classList.remove('is-visible');
-      e.target.elements['search-text'].value = '';
+      clear(e);
       return;
     }
 
@@ -117,3 +113,9 @@ refs.btnLoadMore.addEventListener('click', async () => {
     console.log(error.message);
   }
 });
+
+const clear = e => {
+  refs.loader.classList.remove('is-visible');
+  refs.btnLoadMore.classList.remove('is-visible');
+  e.target.elements['search-text'].value = '';
+};
